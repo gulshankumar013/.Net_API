@@ -29,7 +29,7 @@ namespace COMMON_PROJECT_STRUCTURE_API.services
                 else
                 {
                     var sq = @"INSERT INTO pc_student.giganexus (name, email, password, mobile, state, pin) 
-                               VALUES (@name, @email, @password, @mobile, @state, @PIN)";
+                               VALUES (@name, @email, @password, @mobile, @state, @pin)";
                     MySqlParameter[] insertParams = new MySqlParameter[]
                     {
                         new MySqlParameter("@NAME", rData.addInfo["name"]),

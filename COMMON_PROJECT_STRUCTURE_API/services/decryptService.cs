@@ -523,5 +523,10 @@ public string AESDecrypts(string base64Key, string base64Ciphertext)
             return Convert.ToBase64String(byteHash);
         }
     }
-    
+
+    internal ClaimsIdentity? CalculateSHA256Hash(string? v)
+    {
+        throw new NotImplementedException();
+    }
+
 }
