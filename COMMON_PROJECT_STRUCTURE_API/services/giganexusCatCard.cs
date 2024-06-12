@@ -6,16 +6,16 @@ using System;
 
 namespace COMMON_PROJECT_STRUCTURE_API.services
 {
-    public class technexusCard
+    public class giganexusCatCard
     {
         dbServices ds = new dbServices();
 
-        public async Task<responseData> TechnexusCard(requestData rData)
+        public async Task<responseData> GiganexusCatCard(requestData rData)
         {
             responseData resData = new responseData();
             try
             {
-                var query = @"SELECT * FROM pc_student.giganexus_home_card WHERE name=@name";
+                var query = @"SELECT * FROM pc_student.giganexus_cat_card WHERE name=@name";
                 MySqlParameter[] myParam = new MySqlParameter[]
                 {
                     new MySqlParameter("@name", rData.addInfo["name"])
@@ -28,7 +28,7 @@ namespace COMMON_PROJECT_STRUCTURE_API.services
                 }
                 else
                 {
-                    var sq = @"INSERT INTO pc_student.giganexus_home_card(image, name, discription, price) 
+                    var sq = @"INSERT INTO pc_student.giganexus_cat_card(image, name, discription, price) 
                                VALUES (@image, @name, @discription, @price)";
                     MySqlParameter[] insertParams = new MySqlParameter[]
                     {
@@ -49,14 +49,14 @@ namespace COMMON_PROJECT_STRUCTURE_API.services
             return resData;
         }
 
-        public async Task<responseData>DeleteTechnexusCard(requestData rData)
+        public async Task<responseData>DeleteGiganexusCatCard(requestData rData)
         {
 
             responseData resData = new responseData();
            try
             {
                 // Your delete query
-                var query = @"DELETE FROM pc_student.giganexus_home_card WHERE id = @Id;";
+                var query = @"DELETE FROM pc_student.giganexus_cat_card WHERE id = @Id;";
 
                 // Your parameters
                 MySqlParameter[] myParam = new MySqlParameter[]
@@ -92,12 +92,12 @@ namespace COMMON_PROJECT_STRUCTURE_API.services
             return resData;
         }
 
-         public async Task<responseData> UpdateTechnexusCard(requestData rData)
+         public async Task<responseData>UpdateGiganexusCatCard(requestData rData)
         {
             responseData resData = new responseData();
             try
             {
-                var query = @"UPDATE pc_student.giganexus_home_card
+                var query = @"UPDATE pc_student.giganexus_cat_card
                               SET image = @image, name = @name, discription = @discription, price = @price
                               WHERE id = @id";
                 MySqlParameter[] myParam = new MySqlParameter[]
