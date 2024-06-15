@@ -24,6 +24,9 @@ var builder = WebHost.CreateDefaultBuilder(args)
         s.AddSingleton<fetchgiganexusCatCard>();
         s.AddSingleton<cart>();
         s.AddSingleton<giganexusWishlist>();
+        s.AddSingleton<contactUs>();
+        s.AddSingleton<giganexusAdminSignup>();
+        s.AddSingleton<adminSignin>();
 
 
         s.AddAuthorization();
@@ -60,6 +63,9 @@ var builder = WebHost.CreateDefaultBuilder(args)
             var fetchgiganexusCatCard = e.ServiceProvider.GetRequiredService<fetchgiganexusCatCard>();
             var cart = e.ServiceProvider.GetRequiredService<cart>();
             var giganexusWishlist = e.ServiceProvider.GetRequiredService<giganexusWishlist>();
+            var contactUs = e.ServiceProvider.GetRequiredService<contactUs>();
+            var giganexusAdminSignup = e.ServiceProvider.GetRequiredService<giganexusAdminSignup>();
+            var adminSignin = e.ServiceProvider.GetRequiredService<adminSignin>();
             
 
             e.MapPost("login",
@@ -261,6 +267,60 @@ var builder = WebHost.CreateDefaultBuilder(args)
                 requestData rData = JsonSerializer.Deserialize<requestData>(body);
                 if (rData.eventID == "1001") // update
                     await http.Response.WriteAsJsonAsync(await giganexusWishlist.FetchGiganexusWishlist(rData));
+            });
+
+            e.MapPost("contactUs",
+            [AllowAnonymous] async (HttpContext http) =>
+            {
+                var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+                requestData rData = JsonSerializer.Deserialize<requestData>(body);
+                if (rData.eventID == "1001") // update
+                    await http.Response.WriteAsJsonAsync(await contactUs.ContactUs(rData));
+            });
+
+            e.MapPost("giganexusAdmin",
+            [AllowAnonymous] async (HttpContext http) =>
+            {
+                var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+                requestData rData = JsonSerializer.Deserialize<requestData>(body);
+                if (rData.eventID == "1001") // update
+                    await http.Response.WriteAsJsonAsync(await giganexusAdminSignup.GiganexusAdminSignup(rData));
+            });
+
+            e.MapPost("deleteGiganexusAdmin",
+            [AllowAnonymous] async (HttpContext http) =>
+            {
+                var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+                requestData rData = JsonSerializer.Deserialize<requestData>(body);
+                if (rData.eventID == "1001") // update
+                    await http.Response.WriteAsJsonAsync(await giganexusAdminSignup.DeleteGiganexusAdmin(rData));
+            });
+
+            e.MapPost("updateGiganexusAdmin",
+            [AllowAnonymous] async (HttpContext http) =>
+            {
+                var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+                requestData rData = JsonSerializer.Deserialize<requestData>(body);
+                if (rData.eventID == "1001") // update
+                    await http.Response.WriteAsJsonAsync(await giganexusAdminSignup.UpdateGiganexusAdmin(rData));
+            });
+
+            e.MapPost("fetchGiganexusAdmin",
+            [AllowAnonymous] async (HttpContext http) =>
+            {
+                var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+                requestData rData = JsonSerializer.Deserialize<requestData>(body);
+                if (rData.eventID == "1001") // update
+                    await http.Response.WriteAsJsonAsync(await giganexusAdminSignup.FetchGiganexusAdmin(rData));
+            });
+
+            e.MapPost("adminSignin",
+            [AllowAnonymous] async (HttpContext http) =>
+            {
+                var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+                requestData rData = JsonSerializer.Deserialize<requestData>(body);
+                if (rData.eventID == "1001") // update
+                    await http.Response.WriteAsJsonAsync(await adminSignin.AdminSignin(rData));
             });
 
 
