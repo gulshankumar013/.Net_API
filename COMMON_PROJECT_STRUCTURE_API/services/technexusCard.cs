@@ -10,7 +10,7 @@ namespace COMMON_PROJECT_STRUCTURE_API.services
     {
         dbServices ds = new dbServices();
 
-        public async Task<responseData> TechnexusCard(requestData rData)
+          public async Task<responseData> TechnexusCard(requestData req)
         {
             responseData resData = new responseData();
             try
@@ -18,24 +18,31 @@ namespace COMMON_PROJECT_STRUCTURE_API.services
                 var query = @"SELECT * FROM pc_student.giganexus_home_card WHERE name=@name";
                 MySqlParameter[] myParam = new MySqlParameter[]
                 {
-                    new MySqlParameter("@name", rData.addInfo["name"])
+                    new MySqlParameter("@name", req.addInfo["name"])
                 };
                 var dbData = ds.executeSQL(query, myParam);
-                
-                if (dbData[0].Count() > 0)
+
+                if (dbData[0].Count > 0)
                 {
                     resData.rData["rMessage"] = "Card already added";
                 }
                 else
                 {
+                    byte[] imageData = null;
+                    if (req.addInfo.ContainsKey("image"))
+                    {
+                        var filePath = req.addInfo["image"].ToString();
+                        imageData = File.ReadAllBytes(filePath);
+                    }
+
                     var sq = @"INSERT INTO pc_student.giganexus_home_card(image, name, discription, price) 
                                VALUES (@image, @name, @discription, @price)";
                     MySqlParameter[] insertParams = new MySqlParameter[]
                     {
-                        new MySqlParameter("@image", rData.addInfo["image"]),
-                        new MySqlParameter("@name", rData.addInfo["name"]),
-                        new MySqlParameter("@discription", rData.addInfo["discription"]),
-                        new MySqlParameter("@price", rData.addInfo["price"]),
+                        new MySqlParameter("@image", MySqlDbType.Blob) { Value = imageData },
+                        new MySqlParameter("@name", req.addInfo["name"]),
+                        new MySqlParameter("@discription", req.addInfo["discription"]),
+                        new MySqlParameter("@price", req.addInfo["price"]),
                     };
                     var insertResult = ds.executeSQL(sq, insertParams);
 
@@ -48,6 +55,7 @@ namespace COMMON_PROJECT_STRUCTURE_API.services
             }
             return resData;
         }
+        
 
         public async Task<responseData>DeleteTechnexusCard(requestData rData)
         {

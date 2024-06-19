@@ -18,7 +18,7 @@ namespace COMMON_PROJECT_STRUCTURE_API.services
             {
                 // Your update query
                 var query = @"UPDATE pc_student.giganexus 
-                           SET name = @Name, mobile = @Mobile, email = @Email, state = @State, pin = @Pin 
+                           SET name = @Name, mobile = @Mobile, email = @Email,password = @Password, state = @State, pin = @Pin 
                            WHERE id = @Id;";
 
                 // Your parameters
@@ -26,8 +26,9 @@ namespace COMMON_PROJECT_STRUCTURE_API.services
                 {
                     new MySqlParameter("@Id", rData.addInfo["id"]),
                     new MySqlParameter("@Name", rData.addInfo["name"]),
+                     new MySqlParameter("@Email", rData.addInfo["email"]),
+                     new MySqlParameter("@Password", rData.addInfo["password"]),
                     new MySqlParameter("@Mobile", rData.addInfo["mobile"]),
-                    new MySqlParameter("@Email", rData.addInfo["email"]),
                     new MySqlParameter("@State", rData.addInfo["state"]),
                     new MySqlParameter("@Pin", rData.addInfo["pin"])
                 };

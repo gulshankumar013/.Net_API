@@ -27,6 +27,7 @@ var builder = WebHost.CreateDefaultBuilder(args)
         s.AddSingleton<contactUs>();
         s.AddSingleton<giganexusAdminSignup>();
         s.AddSingleton<adminSignin>();
+        s.AddSingleton<fetchAllMessage>();
 
 
         s.AddAuthorization();
@@ -66,6 +67,7 @@ var builder = WebHost.CreateDefaultBuilder(args)
             var contactUs = e.ServiceProvider.GetRequiredService<contactUs>();
             var giganexusAdminSignup = e.ServiceProvider.GetRequiredService<giganexusAdminSignup>();
             var adminSignin = e.ServiceProvider.GetRequiredService<adminSignin>();
+            var fetchAllMessage = e.ServiceProvider.GetRequiredService<fetchAllMessage>();
             
 
             e.MapPost("login",
@@ -94,6 +96,21 @@ var builder = WebHost.CreateDefaultBuilder(args)
                 if (rData.eventID == "1001") // update
                     await http.Response.WriteAsJsonAsync(await signup.Signup(rData));
             });
+            
+            e.MapPost("fetchAllUser",
+            [AllowAnonymous] async (HttpContext http) =>
+            {
+                var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+                requestData rData = JsonSerializer.Deserialize<requestData>(body);
+
+                if (rData.eventID == "1001") // getUserByEmail
+                {
+                    var result = await signup.FetchAllUser(body);
+                    await http.Response.WriteAsJsonAsync(result);
+                }
+            });
+
+
 
               e.MapPost("forgot_password",
             [AllowAnonymous] async (HttpContext http) =>
@@ -118,7 +135,7 @@ var builder = WebHost.CreateDefaultBuilder(args)
             {
                 var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
                 requestData rData = JsonSerializer.Deserialize<requestData>(body);
-                if (rData.eventID == "1002") // delete
+                if (rData.eventID == "1001") // delete
                     await http.Response.WriteAsJsonAsync(await update.Delete(rData));
             });
 
@@ -132,14 +149,14 @@ var builder = WebHost.CreateDefaultBuilder(args)
             });
 
 
-             e.MapPost("deleteTechnexusCard",
-            [AllowAnonymous] async (HttpContext http) =>
-            {
-                var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
-                requestData rData = JsonSerializer.Deserialize<requestData>(body);
-                if (rData.eventID == "1001") // update
-                    await http.Response.WriteAsJsonAsync(await technexusCard.DeleteTechnexusCard(rData));
-            });
+            _ = e.MapPost("deleteTechnexusCard",
+           [AllowAnonymous] async (HttpContext http) =>
+           {
+               var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+               requestData rData = JsonSerializer.Deserialize<requestData>(body);
+               if (rData.eventID == "1001") // update
+                   await http.Response.WriteAsJsonAsync(await technexusCard.DeleteTechnexusCard(rData));
+           });
 
              e.MapPost("updateTechnexusCard",
             [AllowAnonymous] async (HttpContext http) =>
@@ -278,6 +295,31 @@ var builder = WebHost.CreateDefaultBuilder(args)
                     await http.Response.WriteAsJsonAsync(await contactUs.ContactUs(rData));
             });
 
+            
+           e.MapPost("fetchAllMessage",
+            [AllowAnonymous] async (HttpContext http) =>
+            {
+                var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+                requestData rData = JsonSerializer.Deserialize<requestData>(body);
+
+                if (rData.eventID == "1001") // getUserByEmail
+                {
+                    var result = await fetchAllMessage.FetchAllMessage(body);
+                    await http.Response.WriteAsJsonAsync(result);
+                }
+            });
+
+              
+            e.MapPost("deleteMessageId",
+            [AllowAnonymous] async (HttpContext http) =>
+            {
+                var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+                requestData rData = JsonSerializer.Deserialize<requestData>(body);
+                if (rData.eventID == "1001") // update
+                    await http.Response.WriteAsJsonAsync(await fetchAllMessage.DeleteMessageId(rData));
+            });
+
+
             e.MapPost("giganexusAdmin",
             [AllowAnonymous] async (HttpContext http) =>
             {
@@ -312,6 +354,20 @@ var builder = WebHost.CreateDefaultBuilder(args)
                 requestData rData = JsonSerializer.Deserialize<requestData>(body);
                 if (rData.eventID == "1001") // update
                     await http.Response.WriteAsJsonAsync(await giganexusAdminSignup.FetchGiganexusAdmin(rData));
+            });
+
+
+            e.MapPost("fetchAllAdmin",
+            [AllowAnonymous] async (HttpContext http) =>
+            {
+                var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+                requestData rData = JsonSerializer.Deserialize<requestData>(body);
+
+                if (rData.eventID == "1001") // getUserByEmail
+                {
+                    var result = await giganexusAdminSignup.FetchAllAdmin(body);
+                    await http.Response.WriteAsJsonAsync(result);
+                }
             });
 
             e.MapPost("adminSignin",

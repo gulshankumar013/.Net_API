@@ -50,5 +50,53 @@ namespace COMMON_PROJECT_STRUCTURE_API.services
             }
             return resData;
         }
+
+         public async Task<responseData> FetchAllUser(string details)
+        {
+            responseData resData = new responseData();
+            try
+            {
+                var query = @"SELECT * FROM pc_student.giganexus ORDER BY id DESC ";
+
+                var dbData = ds.executeSQL(query, null);
+
+                List<object> usersList = new List<object>();
+
+                foreach (var rowSet in dbData)
+                {
+                    foreach (var row in rowSet)
+                    {
+                        List<string> rowData = new List<string>();
+
+                        foreach (var column in row)
+                        {
+                            rowData.Add(column.ToString());
+                        }
+
+                        var user = new
+                        {
+                            id = rowData[0],
+                            name = rowData[1],
+                            email = rowData[2],
+                            password = rowData[3],
+                            mobile = rowData[4],
+                            state = rowData[5],
+                            pin = rowData[6],
+                        };
+
+                        usersList.Add(user);
+                    }
+                }
+
+                resData.rData["users"] = usersList;
+                resData.rData["rMessage"] = "Successful";
+            }
+            catch (Exception ex)
+            {
+                resData.rData["rMessage"] = "Exception occurred: " + ex.Message;
+            }
+
+            return resData;
+        }
     }
 }
