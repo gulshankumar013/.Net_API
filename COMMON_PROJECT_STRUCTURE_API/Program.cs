@@ -96,6 +96,17 @@ var builder = WebHost.CreateDefaultBuilder(args)
                 if (rData.eventID == "1001") // update
                     await http.Response.WriteAsJsonAsync(await signup.Signup(rData));
             });
+
+            
+            e.MapPost("fetchUser",
+            [AllowAnonymous] async (HttpContext http) =>
+            {
+                var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+                requestData rData = JsonSerializer.Deserialize<requestData>(body);
+                if (rData.eventID == "1001") // update
+                    await http.Response.WriteAsJsonAsync(await signup.FetchUser(rData));
+            });
+            
             
             e.MapPost("fetchAllUser",
             [AllowAnonymous] async (HttpContext http) =>

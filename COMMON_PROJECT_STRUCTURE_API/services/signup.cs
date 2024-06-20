@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using System;
+using System.Collections;
 
 namespace COMMON_PROJECT_STRUCTURE_API.services
 {
@@ -96,6 +97,48 @@ namespace COMMON_PROJECT_STRUCTURE_API.services
                 resData.rData["rMessage"] = "Exception occurred: " + ex.Message;
             }
 
+            return resData;
+        }
+
+          public async Task<responseData>FetchUser(requestData req)
+
+ {
+            responseData resData = new responseData();
+            resData.rData["rCode"] = 0;
+            try
+            {
+                var list = new ArrayList();
+                MySqlParameter[] myParams = new MySqlParameter[] {
+                new MySqlParameter("@email", req.addInfo["email"]),
+                };
+                var sq = $"SELECT * FROM pc_student.giganexus WHERE email=@email;";
+                var data = ds.ExecuteSQLName(sq, myParams);
+
+                if (data == null || data[0].Count() == 0)
+                {
+                    resData.rData["rCode"] = 1;
+                    resData.rData["rMessage"] = "No user is present...";
+                }
+                else
+                {
+
+                    resData.rData["id"] = data[0][0]["id"];
+                    resData.rData["name"] = data[0][0]["name"];
+                     resData.rData["email"] = data[0][0]["email"];
+                    resData.rData["password"] = data[0][0]["password"];
+                    resData.rData["mobile"] = data[0][0]["mobile"];
+                    resData.rData["state"] = data[0][0]["state"];
+                    resData.rData["pin"] = data[0][0]["pin"];
+                    
+                }
+
+            }
+            catch (Exception ex)
+            {
+                resData.rData["rCode"] = 1;
+                resData.rData["rMessage"] = ex.Message;
+
+            }
             return resData;
         }
     }

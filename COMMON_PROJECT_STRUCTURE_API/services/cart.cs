@@ -150,6 +150,7 @@ namespace COMMON_PROJECT_STRUCTURE_API.services
                 {
 
                     resData.rData["id"] = data[0][0]["id"];
+                    
                     resData.rData["image"] = data[0][0]["image"];
                     resData.rData["name"] = data[0][0]["name"];
                     resData.rData["price"] = data[0][0]["price"];
