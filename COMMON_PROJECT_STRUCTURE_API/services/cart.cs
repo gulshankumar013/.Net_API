@@ -56,7 +56,7 @@ namespace COMMON_PROJECT_STRUCTURE_API.services
            try
             {
                 // Your delete query
-                var query = @"DELETE FROM pc_student.giganexus_cart WHERE id = @Id;";
+                var query = @"DELETE FROM pc_student.giganexus_cat_card WHERE id = @Id;";
 
                 // Your parameters
                 MySqlParameter[] myParam = new MySqlParameter[]
