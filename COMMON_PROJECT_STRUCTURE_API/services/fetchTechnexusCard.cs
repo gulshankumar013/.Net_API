@@ -13,45 +13,53 @@ namespace COMMON_PROJECT_STRUCTURE_API.services
         dbServices ds = new dbServices();
         
     
-        public async Task<responseData> FetchTechnexusCard(requestData req)
-
- {
+       public async Task<responseData> FetchTechnexusCard(string details)
+        {
             responseData resData = new responseData();
-            resData.rData["rCode"] = 0;
             try
             {
-                var list = new ArrayList();
-                MySqlParameter[] myParams = new MySqlParameter[] {
-                new MySqlParameter("@Id", req.addInfo["Id"]),
-                };
-                var sq = $"SELECT * FROM pc_student.giganexus_home_card WHERE id=@id;";
-                var data = ds.ExecuteSQLName(sq, myParams);
+                var query = @"SELECT * FROM pc_student.giganexus_home_card  ";
 
-                if (data == null || data[0].Count() == 0)
+                var dbData = ds.executeSQL(query, null);
+
+                List<object> usersList = new List<object>();
+
+                foreach (var rowSet in dbData)
                 {
-                    resData.rData["rCode"] = 1;
-                    resData.rData["rMessage"] = "No Card is present...";
-                }
-                else
-                {
+                    foreach (var row in rowSet)
+                    {
+                        List<string> rowData = new List<string>();
 
-                    resData.rData["id"] = data[0][0]["id"];
-                    resData.rData["image"] = data[0][0]["image"];
-                    resData.rData["name"] = data[0][0]["name"];
-                    resData.rData["discription"] = data[0][0]["discription"];
-                    resData.rData["price"] = data[0][0]["price"];
-                    
+                        foreach (var column in row)
+                        {
+                            rowData.Add(column.ToString());
+                        }
+
+                        var user = new
+                        {
+                            id = rowData[0],
+                            image = rowData[1],
+                            name = rowData[2],
+                            discription = rowData[3],
+                            price = rowData[4],
+                            brand = rowData[5],
+                            about = rowData[6],
+                            specifications = rowData[7]
+                        };
+
+                        usersList.Add(user);
+                    }
                 }
 
+                resData.rData["users"] = usersList;
+                resData.rData["rMessage"] = "Successful";
             }
             catch (Exception ex)
             {
-                resData.rData["rCode"] = 1;
-                resData.rData["rMessage"] = ex.Message;
-
+                resData.rData["rMessage"] = "Exception occurred: " + ex.Message;
             }
+
             return resData;
         }
-         
     }
 }

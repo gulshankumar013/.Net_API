@@ -10,47 +10,91 @@ namespace COMMON_PROJECT_STRUCTURE_API.services
     {
         dbServices ds = new dbServices();
 
-          public async Task<responseData> TechnexusCard(requestData req)
+        //   public async Task<responseData> TechnexusCard(requestData req)
+        // {
+        //     responseData resData = new responseData();
+        //     try
+        //     {
+        //         var query = @"SELECT * FROM pc_student.giganexus_home_card WHERE name=@name";
+        //         MySqlParameter[] myParam = new MySqlParameter[]
+        //         {
+        //             new MySqlParameter("@name", req.addInfo["name"])
+        //         };
+        //         var dbData = ds.executeSQL(query, myParam);
+
+        //         if (dbData[0].Count > 0)
+        //         {
+        //             resData.rData["rMessage"] = "Card already added";
+        //         }
+        //         else
+        //         {
+        //             byte[] imageData = null;
+        //             if (req.addInfo.ContainsKey("image"))
+        //             {
+        //                 var filePath = req.addInfo["image"].ToString();
+        //                 imageData = File.ReadAllBytes(filePath);
+        //             }
+
+        //             var sq = @"INSERT INTO pc_student.giganexus_home_card(image, name, discription, price,brand,about,specifications) 
+        //                        VALUES (@image, @name, @discription, @price ,@brand ,@about,@specifications)";
+        //             MySqlParameter[] insertParams = new MySqlParameter[]
+        //             {
+        //                 new MySqlParameter("@image", MySqlDbType.Blob) { Value = imageData },
+        //                 new MySqlParameter("@name", req.addInfo["name"]),
+        //                 new MySqlParameter("@discription", req.addInfo["discription"]),
+        //                 new MySqlParameter("@price", req.addInfo["price"]),
+        //                 new MySqlParameter("@brand", req.addInfo["brand"]),
+        //                 new MySqlParameter("@about", req.addInfo["about"]),
+        //                 new MySqlParameter("@specifications", req.addInfo["specifications"]),
+        //             };
+        //             var insertResult = ds.executeSQL(sq, insertParams);
+
+        //             resData.rData["rMessage"] = "Card added successfully";
+        //         }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         resData.rData["rMessage"] = "An error occurred: " + ex.Message;
+        //     }
+        //     return resData;
+        // }
+
+        public async Task<responseData> TechnexusCard(requestData req)
         {
             responseData resData = new responseData();
             try
             {
-                var query = @"SELECT * FROM pc_student.giganexus_home_card WHERE name=@name";
-                MySqlParameter[] myParam = new MySqlParameter[]
-                {
-                    new MySqlParameter("@name", req.addInfo["name"])
-                };
-                var dbData = ds.executeSQL(query, myParam);
+                
 
-                if (dbData[0].Count > 0)
+                MySqlParameter[] insertParams = new MySqlParameter[]
+              {
+                        
+                         new MySqlParameter("@image", req.addInfo["image"]),
+                         new MySqlParameter("@name", req.addInfo["name"]),
+                         new MySqlParameter("@discription", req.addInfo["discription"]),
+                         new MySqlParameter("@price", req.addInfo["price"]),
+                         new MySqlParameter("@brand", req.addInfo["brand"]),
+                         new MySqlParameter("@about", req.addInfo["about"]),
+                         new MySqlParameter("@specifications", req.addInfo["specifications"]),
+              };
+                var sq = @"insert into pc_student.giganexus_home_card(image,name,discription,price,brand,about,specifications) values(@image,@name,@discription,@price,@brand,@about,@specifications)";
+
+                var insertResult = ds.executeSQL(sq, insertParams);
+                if (insertResult[0].Count() == null)
                 {
-                    resData.rData["rMessage"] = "Card already added";
+                    resData.rData["rCode"] = 1;
+                    resData.rData["rMessage"] = "Failed to create card";
                 }
                 else
                 {
-                    byte[] imageData = null;
-                    if (req.addInfo.ContainsKey("image"))
-                    {
-                        var filePath = req.addInfo["image"].ToString();
-                        imageData = File.ReadAllBytes(filePath);
-                    }
+                    resData.rData["rCode"] = 0;
+                    resData.rData["rMessage"] = "card created successfully";
 
-                    var sq = @"INSERT INTO pc_student.giganexus_home_card(image, name, discription, price) 
-                               VALUES (@image, @name, @discription, @price)";
-                    MySqlParameter[] insertParams = new MySqlParameter[]
-                    {
-                        new MySqlParameter("@image", MySqlDbType.Blob) { Value = imageData },
-                        new MySqlParameter("@name", req.addInfo["name"]),
-                        new MySqlParameter("@discription", req.addInfo["discription"]),
-                        new MySqlParameter("@price", req.addInfo["price"]),
-                    };
-                    var insertResult = ds.executeSQL(sq, insertParams);
-
-                    resData.rData["rMessage"] = "Card added successfully";
                 }
             }
             catch (Exception ex)
             {
+                resData.rData["rCode"] = 1;
                 resData.rData["rMessage"] = "An error occurred: " + ex.Message;
             }
             return resData;

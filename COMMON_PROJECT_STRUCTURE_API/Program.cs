@@ -28,6 +28,7 @@ var builder = WebHost.CreateDefaultBuilder(args)
         s.AddSingleton<giganexusAdminSignup>();
         s.AddSingleton<adminSignin>();
         s.AddSingleton<fetchAllMessage>();
+        s.AddSingleton<trandingProduct>();
 
 
         s.AddAuthorization();
@@ -68,6 +69,7 @@ var builder = WebHost.CreateDefaultBuilder(args)
             var giganexusAdminSignup = e.ServiceProvider.GetRequiredService<giganexusAdminSignup>();
             var adminSignin = e.ServiceProvider.GetRequiredService<adminSignin>();
             var fetchAllMessage = e.ServiceProvider.GetRequiredService<fetchAllMessage>();
+            var trandingProduct = e.ServiceProvider.GetRequiredService<trandingProduct>();
             
 
             e.MapPost("login",
@@ -179,13 +181,17 @@ var builder = WebHost.CreateDefaultBuilder(args)
             });
 
       
-            e.MapPost("fetchTechnexusCard",
+           e.MapPost("fetchTechnexusCard",
             [AllowAnonymous] async (HttpContext http) =>
             {
                 var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
                 requestData rData = JsonSerializer.Deserialize<requestData>(body);
-                if (rData.eventID == "1001") // update
-                    await http.Response.WriteAsJsonAsync(await fetchTechnexusCard.FetchTechnexusCard(rData));
+
+                if (rData.eventID == "1001") // getUserByEmail
+                {
+                    var result = await fetchTechnexusCard.FetchTechnexusCard(body);
+                    await http.Response.WriteAsJsonAsync(result);
+                }
             });
 
 
@@ -388,6 +394,29 @@ var builder = WebHost.CreateDefaultBuilder(args)
                 requestData rData = JsonSerializer.Deserialize<requestData>(body);
                 if (rData.eventID == "1001") // update
                     await http.Response.WriteAsJsonAsync(await adminSignin.AdminSignin(rData));
+            });
+
+            
+            e.MapPost("trandingProduct",
+            [AllowAnonymous] async (HttpContext http) =>
+            {
+                var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+                requestData rData = JsonSerializer.Deserialize<requestData>(body);
+                if (rData.eventID == "1001") // update
+                    await http.Response.WriteAsJsonAsync(await trandingProduct.TrandingProduct(rData));
+            });
+
+            e.MapPost("fetchTrandingProduct",
+            [AllowAnonymous] async (HttpContext http) =>
+            {
+                var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+                requestData rData = JsonSerializer.Deserialize<requestData>(body);
+
+                if (rData.eventID == "1001") // getUserByEmail
+                {
+                    var result = await trandingProduct.FetchTrandingProduct(body);
+                    await http.Response.WriteAsJsonAsync(result);
+                }
             });
 
 
