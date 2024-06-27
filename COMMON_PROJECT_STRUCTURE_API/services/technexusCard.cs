@@ -9,56 +9,6 @@ namespace COMMON_PROJECT_STRUCTURE_API.services
     public class technexusCard
     {
         dbServices ds = new dbServices();
-
-        //   public async Task<responseData> TechnexusCard(requestData req)
-        // {
-        //     responseData resData = new responseData();
-        //     try
-        //     {
-        //         var query = @"SELECT * FROM pc_student.giganexus_home_card WHERE name=@name";
-        //         MySqlParameter[] myParam = new MySqlParameter[]
-        //         {
-        //             new MySqlParameter("@name", req.addInfo["name"])
-        //         };
-        //         var dbData = ds.executeSQL(query, myParam);
-
-        //         if (dbData[0].Count > 0)
-        //         {
-        //             resData.rData["rMessage"] = "Card already added";
-        //         }
-        //         else
-        //         {
-        //             byte[] imageData = null;
-        //             if (req.addInfo.ContainsKey("image"))
-        //             {
-        //                 var filePath = req.addInfo["image"].ToString();
-        //                 imageData = File.ReadAllBytes(filePath);
-        //             }
-
-        //             var sq = @"INSERT INTO pc_student.giganexus_home_card(image, name, discription, price,brand,about,specifications) 
-        //                        VALUES (@image, @name, @discription, @price ,@brand ,@about,@specifications)";
-        //             MySqlParameter[] insertParams = new MySqlParameter[]
-        //             {
-        //                 new MySqlParameter("@image", MySqlDbType.Blob) { Value = imageData },
-        //                 new MySqlParameter("@name", req.addInfo["name"]),
-        //                 new MySqlParameter("@discription", req.addInfo["discription"]),
-        //                 new MySqlParameter("@price", req.addInfo["price"]),
-        //                 new MySqlParameter("@brand", req.addInfo["brand"]),
-        //                 new MySqlParameter("@about", req.addInfo["about"]),
-        //                 new MySqlParameter("@specifications", req.addInfo["specifications"]),
-        //             };
-        //             var insertResult = ds.executeSQL(sq, insertParams);
-
-        //             resData.rData["rMessage"] = "Card added successfully";
-        //         }
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         resData.rData["rMessage"] = "An error occurred: " + ex.Message;
-        //     }
-        //     return resData;
-        // }
-
         public async Task<responseData> TechnexusCard(requestData req)
         {
             responseData resData = new responseData();
@@ -179,5 +129,53 @@ namespace COMMON_PROJECT_STRUCTURE_API.services
             return resData;
         }
 
+         public async Task<responseData> FetchAllTechnexusCard(string details)
+        {
+            responseData resData = new responseData();
+            try
+            {
+                var query = @"SELECT * FROM pc_student.giganexus_contactUs ORDER BY id DESC ";
+
+                var dbData = ds.executeSQL(query, null);
+
+                List<object> usersList = new List<object>();
+
+                foreach (var rowSet in dbData)
+                {
+                    foreach (var row in rowSet)
+                    {
+                        List<string> rowData = new List<string>();
+
+                        foreach (var column in row)
+                        {
+                            rowData.Add(column.ToString());
+                        }
+
+                        var user = new
+                        {
+                             id = rowData[0],
+                            image = rowData[1],
+                            name = rowData[2],
+                            discription = rowData[3],
+                            price = rowData[4],
+                            brand = rowData[5],
+                            about = rowData[6],
+                            specifications = rowData[7]
+                        };
+
+                        usersList.Add(user);
+                    }
+                }
+
+                resData.rData["users"] = usersList;
+                resData.rData["rMessage"] = "Successful";
+            }
+            catch (Exception ex)
+            {
+                resData.rData["rMessage"] = "Exception occurred: " + ex.Message;
+            }
+
+            return resData;
+        }
     }
 }

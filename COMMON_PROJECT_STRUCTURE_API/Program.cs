@@ -29,6 +29,7 @@ var builder = WebHost.CreateDefaultBuilder(args)
         s.AddSingleton<adminSignin>();
         s.AddSingleton<fetchAllMessage>();
         s.AddSingleton<trandingProduct>();
+        s.AddSingleton<offerOnBrands>();
 
 
         s.AddAuthorization();
@@ -70,6 +71,7 @@ var builder = WebHost.CreateDefaultBuilder(args)
             var adminSignin = e.ServiceProvider.GetRequiredService<adminSignin>();
             var fetchAllMessage = e.ServiceProvider.GetRequiredService<fetchAllMessage>();
             var trandingProduct = e.ServiceProvider.GetRequiredService<trandingProduct>();
+            var offerOnBrands = e.ServiceProvider.GetRequiredService<offerOnBrands>();
             
 
             e.MapPost("login",
@@ -152,6 +154,25 @@ var builder = WebHost.CreateDefaultBuilder(args)
                     await http.Response.WriteAsJsonAsync(await update.Delete(rData));
             });
 
+             e.MapPost("updateProfileImage",
+            [AllowAnonymous] async (HttpContext http) =>
+            {
+                var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+                requestData rData = JsonSerializer.Deserialize<requestData>(body);
+                if (rData.eventID == "1001") // delete
+                    await http.Response.WriteAsJsonAsync(await update.UpdateProfileImage(rData));
+            });
+
+                  e.MapPost("fetchProfileImage",
+            [AllowAnonymous] async (HttpContext http) =>
+            {
+                var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+                requestData rData = JsonSerializer.Deserialize<requestData>(body);
+                if (rData.eventID == "1001") // delete
+                    await http.Response.WriteAsJsonAsync(await update.FetchProfileImage(rData));
+            });
+
+
              e.MapPost("technexusCard",
             [AllowAnonymous] async (HttpContext http) =>
             {
@@ -190,6 +211,19 @@ var builder = WebHost.CreateDefaultBuilder(args)
                 if (rData.eventID == "1001") // getUserByEmail
                 {
                     var result = await fetchTechnexusCard.FetchTechnexusCard(body);
+                    await http.Response.WriteAsJsonAsync(result);
+                }
+            });
+
+            e.MapPost("fetchAllTechnexusCard",
+            [AllowAnonymous] async (HttpContext http) =>
+            {
+                var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+                requestData rData = JsonSerializer.Deserialize<requestData>(body);
+
+                if (rData.eventID == "1001") // getUserByEmail
+                {
+                    var result = await technexusCard.FetchAllTechnexusCard(body);
                     await http.Response.WriteAsJsonAsync(result);
                 }
             });
@@ -418,6 +452,29 @@ var builder = WebHost.CreateDefaultBuilder(args)
                     await http.Response.WriteAsJsonAsync(result);
                 }
             });
+
+              e.MapPost("offerOnBrands",
+            [AllowAnonymous] async (HttpContext http) =>
+            {
+                var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+                requestData rData = JsonSerializer.Deserialize<requestData>(body);
+                if (rData.eventID == "1001") // update
+                    await http.Response.WriteAsJsonAsync(await offerOnBrands.OfferOnBrands(rData));
+            });
+
+              e.MapPost("fetchTopBrandProduct",
+            [AllowAnonymous] async (HttpContext http) =>
+            {
+                var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+                requestData rData = JsonSerializer.Deserialize<requestData>(body);
+
+                if (rData.eventID == "1001") // getUserByEmail
+                {
+                    var result = await offerOnBrands.FetchTopBrandProduct(body);
+                    await http.Response.WriteAsJsonAsync(result);
+                }
+            });
+
 
 
 
