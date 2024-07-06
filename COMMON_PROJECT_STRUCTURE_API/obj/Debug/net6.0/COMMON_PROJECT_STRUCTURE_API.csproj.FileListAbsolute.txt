@@ -184,3 +184,4 @@ C:\Users\gulshan.kumar\Desktop\Gulshan\Api\COMMON_PROJECT_STRUCTURE_API\obj\Debu
 C:\Users\gulshan.kumar\Desktop\Gulshan\Api\COMMON_PROJECT_STRUCTURE_API\obj\Debug\net6.0\COMMON_PROJECT_STRUCTURE_API.csproj.CopyComplete
 C:\Users\gulshan.kumar\Desktop\Gulshan\Api\COMMON_PROJECT_STRUCTURE_API\obj\Debug\net6.0\COMMON_PROJECT_STRUCTURE_API.genruntimeconfig.cache
 C:\Users\gulshan.kumar\Desktop\Gulshan\Api\COMMON_PROJECT_STRUCTURE_API\obj\Debug\net6.0\ref\COMMON_PROJECT_STRUCTURE_API.dll
+C:\Users\gulshan.kumar\Desktop\Gulshan\Api\COMMON_PROJECT_STRUCTURE_API\bin\Debug\net6.0\Razorpay.dll

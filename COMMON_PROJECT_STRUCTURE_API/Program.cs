@@ -30,6 +30,8 @@ var builder = WebHost.CreateDefaultBuilder(args)
         s.AddSingleton<fetchAllMessage>();
         s.AddSingleton<trandingProduct>();
         s.AddSingleton<offerOnBrands>();
+        s.AddSingleton< paymentService>();
+        s.AddSingleton< orderlist>();
 
 
         s.AddAuthorization();
@@ -72,6 +74,8 @@ var builder = WebHost.CreateDefaultBuilder(args)
             var fetchAllMessage = e.ServiceProvider.GetRequiredService<fetchAllMessage>();
             var trandingProduct = e.ServiceProvider.GetRequiredService<trandingProduct>();
             var offerOnBrands = e.ServiceProvider.GetRequiredService<offerOnBrands>();
+            var  paymentService = e.ServiceProvider.GetRequiredService< paymentService>();
+            var  orderlist = e.ServiceProvider.GetRequiredService< orderlist>();
             
 
             e.MapPost("login",
@@ -473,6 +477,48 @@ var builder = WebHost.CreateDefaultBuilder(args)
                     var result = await offerOnBrands.FetchTopBrandProduct(body);
                     await http.Response.WriteAsJsonAsync(result);
                 }
+            });
+
+        e.MapPost("createOrder",
+        [AllowAnonymous] async (HttpContext http) =>
+        {
+        try
+        {
+            var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+            requestData rData = JsonSerializer.Deserialize<requestData>(body);
+            var result = await paymentService.CreateOrder(rData);
+            await http.Response.WriteAsJsonAsync(result);
+        }
+        catch (Exception ex)
+        {
+            await http.Response.WriteAsJsonAsync(new { error = ex.Message });
+        }
+    });
+
+    e.MapPost("capturePayment",
+        [AllowAnonymous] async (HttpContext http) =>
+        {
+        try
+        {
+            var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+            requestData rData = JsonSerializer.Deserialize<requestData>(body);
+            var result = await paymentService.CapturePayment(rData);
+            await http.Response.WriteAsJsonAsync(result);
+        }
+        catch (Exception ex)
+        {
+            await http.Response.WriteAsJsonAsync(new { error = ex.Message });
+        }
+    });
+
+
+    e.MapPost("orderlist",
+            [AllowAnonymous] async (HttpContext http) =>
+            {
+                var body = await new StreamReader(http.Request.Body).ReadToEndAsync();
+                requestData rData = JsonSerializer.Deserialize<requestData>(body);
+                if (rData.eventID == "1001") // update
+                    await http.Response.WriteAsJsonAsync(await orderlist.Orderlist(rData));
             });
 
 

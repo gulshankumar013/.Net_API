@@ -276,5 +276,24 @@ public class dbServices{
              connReadOnly.Close(); //here is close the connection
              return allTables; // if success return allTables
     }
+
+
+
+    public async Task<int> ExecuteSQL(string query, MySqlParameter[] parameters)
+    {
+        int result = 0;
+
+        using (MySqlConnection conn = new MySqlConnection(appsettings["db:connStrReadOnly"]))
+        {
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            {
+                cmd.Parameters.AddRange(parameters);
+                conn.Open();
+                result = await cmd.ExecuteNonQueryAsync();
+            }
+        }
+
+        return result;
+    }
      
 }

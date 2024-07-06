@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "q4fZT3Kujh2DB+nmcD9yQ0hHyYpUbtChWprVf23yFJyQMpr6GTxnRJSsy3q46jVXiuL5g+q1wtBNsmWft5+mwA==",
+  "dgSpecHash": "89Za0zO/U/GQbYCZaEXXnrvu7kumry7cROXztT/QCzu8O5eR2jpD9hRrvOky/9fAM4hCeUZu657Zrscegklqvw==",
   "success": true,
   "projectFilePath": "C:\\Users\\gulshan.kumar\\Desktop\\Gulshan\\Api\\COMMON_PROJECT_STRUCTURE_API\\COMMON_PROJECT_STRUCTURE_API.csproj",
   "expectedPackageFiles": [
@@ -24,6 +24,7 @@
     "C:\\Users\\gulshan.kumar\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
     "C:\\Users\\gulshan.kumar\\.nuget\\packages\\mysql.data\\8.0.27\\mysql.data.8.0.27.nupkg.sha512",
     "C:\\Users\\gulshan.kumar\\.nuget\\packages\\newtonsoft.json\\12.0.2\\newtonsoft.json.12.0.2.nupkg.sha512",
+    "C:\\Users\\gulshan.kumar\\.nuget\\packages\\razorpay\\2.1.0\\razorpay.2.1.0.nupkg.sha512",
     "C:\\Users\\gulshan.kumar\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
     "C:\\Users\\gulshan.kumar\\.nuget\\packages\\system.configuration.configurationmanager\\4.4.1\\system.configuration.configurationmanager.4.4.1.nupkg.sha512",
     "C:\\Users\\gulshan.kumar\\.nuget\\packages\\system.drawing.common\\4.7.0\\system.drawing.common.4.7.0.nupkg.sha512",
@@ -47,6 +48,16 @@
       "warningLevel": 1,
       "message": "Package 'BouncyCastle 1.8.9' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
       "libraryId": "BouncyCastle",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Razorpay 2.1.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "libraryId": "Razorpay",
       "targetGraphs": [
         "net6.0"
       ]
